@@ -1,11 +1,11 @@
 #! /usr/bin/env php
 <?php
-$list = require __DIR__ . '/data.inc.php';
+$list = require __DIR__ . '/common.inc.php';
 
 $url_tpl = 'http://dict.baidu.com/s?wd=';
-for ($i = 0, $j = strlen($list); $i < $j; $i += 3) {
 
-	$s = substr($list, $i, 3);
+foreach (CHAR as $s) {
+
 	$url = $url_tpl . urlencode($s);
 	echo $url, "\n";
 

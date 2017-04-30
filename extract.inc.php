@@ -17,6 +17,8 @@ foreach ($l as $name) {
 	if ($bDefine) {
 		$aDefine = require __DIR__ . '/data/define/' . $name . '.php';
 		if ($aDefine['replace'] ?? FALSE) {
+			unset($aDefine['replace']);
+			file_put_contents(__DIR__ . '/cache/json/' . $name, json_encode($aDefine) . "\n", LOCK_EX);
 			continue;
 		}
 	}
@@ -128,11 +130,6 @@ foreach ($l as $name) {
 			$word = array_merge($word, $aDefine['word_add'][$pinyin]);
 		}
 
-		if (!$word) {
-			if (!$bDefine || !in_array($pinyin, $aDefine['word_sub'])) {
-				file_put_contents(__DIR__ . '/empty_word.txt', $name . ' ' . $pinyin . "\n", LOCK_EX | FILE_APPEND);
-			}
-		}
 		$lWord[$pinyin] = $word;
 	}
 
@@ -146,16 +143,22 @@ foreach ($l as $name) {
 		exit;
 	}
 
-	if ($bDefine) {
-		foreach ($aDefine['word_sub'] as $sub) {
-			unset($kWord[$sub]);
-			$k = array_search($sub, $data['pinyin']);
-			if ($k === FALSE) {
-				echo $name, "\n";
-				echo 'not found ', $sub, "\n";
-				exit;
-			}
-			unset($data['pinyin'][$k]);
+	foreach ($aDefine['word_sub'] ?? [] as $sub) {
+		unset($kWord[$sub]);
+		$k = array_search($sub, $data['pinyin']);
+		if ($k === FALSE) {
+			echo $name, "\n";
+			echo 'not found ', $sub, "\n";
+			exit;
+		}
+		unset($data['pinyin'][$k]);
+		unset($lWord[$sub]);
+	}
+
+	foreach ($lWord as $pinyin => $word) {
+		if (!$word) {
+			echo $name, ' no word ', $pinyin, "\n";
+			file_put_contents(__DIR__ . '/empty_word.txt', $name . ' ' . $pinyin . "\n", LOCK_EX | FILE_APPEND);
 		}
 	}
 
