@@ -1,13 +1,4 @@
-e59d8f_坏 péi
-e5ae81_宁 zhù
-e5b7ae_差 cī
-e5ba95_底 de
-e6888f_戏 hū
-e68ca1_挡 dàng
-e68f90_提 dǐ
-e69ab4_暴 pù
-e69fa5_查 zhā
-e6b492_洒 xǐ
-e6b497_洗 xiǎn
-e79686_疆 qiáng
-e79691_疑 nǐ
+e58ebf_县 xuán
+e6a1a8_桨 jiǎng
+e78bb8_狸 lí
+e7b5a8_絨 róng

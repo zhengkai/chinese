@@ -67,18 +67,7 @@ foreach ($l as $name) {
 	}
 	$html = substr($html, 0, $end);
 
-	// 单音字
-
-	if (count($data['pinyin']) == 1) {
-		continue;
-		$data['word'] = [$data['pinyin'][0] => demo($html)];
-		file_put_contents(__DIR__ . '/cache/json/' . $name, json_encode($data), LOCK_EX);
-		// echo $name, "\n";
-		continue;
-	}
-
-	// 多音字
-	// echo $name, "\n";
+	// 拼音调整
 
 	if ($bDefine) {
 		if ($aDefine['pinyin_add'] ?? FALSE) {
@@ -89,38 +78,54 @@ foreach ($l as $name) {
 				unset($data['pinyin'][array_search($pinyin, $data['pinyin'])]);
 			}
 		}
+		$data['pinyin'] = array_values($data['pinyin']);
 	}
 
-	$match = [];
-	preg_match_all('#<dl>(.*?)</dl>#', $html, $match);
+	if (count($data['pinyin']) == 1) {
 
-	$match = $match[1];
+		// 单音字
+		$word = demo($html);
+		$lWord = [$data['pinyin'][0] => $word];
 
-	if (count($match) != count($data['pinyin'])) {
-		echo $name, "\n";
-		echo 'pinyin ', implode(' ', $data['pinyin']), "\n";
-		print_r($match);
-		exit;
-	}
+	} else {
 
-	$lWord = [];
+		// 多音字
+		// echo $name, "\n";
 
-	foreach ($match as $line) {
-		$sub = [];
-		preg_match_all('#\[(.*?)\]#', $line, $sub);
+		$match = [];
+		preg_match_all('#<dl>(.*?)</dl>#', $html, $match);
 
-		if (!$sub) {
-			echo 'not match ', $name, "\n";
+		$match = $match[1];
+
+		if (count($match) != count($data['pinyin'])) {
+			echo $name, "\n";
+			echo 'pinyin not match ', implode(' ', $data['pinyin']), "\n";
 			print_r($match);
-			print_r($data['pinyin']);
 			exit;
 		}
 
-		$pinyin = $sub[1][0];
-		$word = demo($line);
+		$lWord = [];
 
-		if ($bDefine && !empty($aDefine['word_add'])) {
-			$word = array_merge($word, $aDefine['word_add']);
+		foreach ($match as $line) {
+			$sub = [];
+			preg_match_all('#\[(.*?)\]#', $line, $sub);
+
+			if (!$sub) {
+				echo 'not match ', $name, "\n";
+				print_r($match);
+				print_r($data['pinyin']);
+				exit;
+			}
+
+			$pinyin = $sub[1][0];
+
+			$lWord[$pinyin] = demo($line);
+		}
+	}
+
+	foreach ($lWord as $pinyin => $word) {
+		if ($bDefine && !empty($aDefine['word_add'][$pinyin])) {
+			$word = array_merge($word, $aDefine['word_add'][$pinyin]);
 		}
 
 		if (!$word) {
@@ -128,7 +133,6 @@ foreach ($l as $name) {
 				file_put_contents(__DIR__ . '/empty_word.txt', $name . ' ' . $pinyin . "\n", LOCK_EX | FILE_APPEND);
 			}
 		}
-
 		$lWord[$pinyin] = $word;
 	}
 
@@ -160,7 +164,7 @@ foreach ($l as $name) {
 	echo "\n", $name, "\n";
 	print_r($data);
 
-	file_put_contents(__DIR__ . '/cache/json/' . $name, json_encode($data), LOCK_EX);
+	file_put_contents(__DIR__ . '/cache/json/' . $name, json_encode($data) . "\n", LOCK_EX);
 
 	// print_r($match);
 
