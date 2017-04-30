@@ -1,26 +1,26 @@
 div, p, ruby, rt {
 	font-family: 'Microsoft Yahei', sans-serif;
-	font-size: 48px;
+	font-size: 36px;
 }
 p.lead {
-	font-size: 48px;
+	font-size: 36px;
 	margin: 16px 0;
 }
 
 div.box {
-	width: 1300px;
+	width: 920px;
 	margin: 0 auto;
 	overflow: auto;
 }
 
 div.box > div {
-	width: 400px;
+	width: 300px;
 	margin: 20px 0;
 	float: left;
 }
 
 body {
-	width: 1400px;
+	width: 920px;
 }
 
 @media all {

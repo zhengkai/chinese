@@ -67,7 +67,7 @@ foreach ($l as $s) {
 
 <div class="page-break"></div>
 
-<div class="box">
+<div class="box" style="border-top: 1px solid black;">
 <?php
 foreach ($j as $a) {
 	$s = str_replace('～', '<u>' . $a['char'] . '</u>', $a['word']);
