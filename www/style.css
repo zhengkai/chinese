@@ -1,0 +1,32 @@
+div, p, ruby, rt {
+	font-family: 'Microsoft Yahei', sans-serif;
+	font-size: 48px;
+}
+p.lead {
+	font-size: 48px;
+	margin: 16px 0;
+}
+
+div.box {
+	width: 1300px;
+	margin: 0 auto;
+	overflow: auto;
+}
+
+div.box > div {
+	width: 400px;
+	margin: 20px 0;
+	float: left;
+}
+
+body {
+	width: 1400px;
+}
+
+@media all {
+	.page-break{ display: none; }
+}
+
+@media print {
+	.page-break{ display: block; page-break-before: always; }
+}

@@ -39,6 +39,8 @@ foreach ($l as $name) {
 
 	$k = $match[1][0];
 
+	$k = str_replace(['[', ']'], '', $k);
+
 	if (empty($k)) {
 		echo $html;
 		print_r($match);
