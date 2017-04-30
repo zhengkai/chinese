@@ -3,7 +3,8 @@
 $list = require __DIR__ . '/data.inc.php';
 
 $url_tpl = 'http://dict.baidu.com/s?wd=';
-for ($i = 0, $j = strlen($list) / 3; $i < $j; $i += 3) {
+for ($i = 0, $j = strlen($list); $i < $j; $i += 3) {
+
 	$s = substr($list, $i, 3);
 	$url = $url_tpl . urlencode($s);
 	echo $url, "\n";
